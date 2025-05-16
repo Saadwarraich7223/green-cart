@@ -98,7 +98,7 @@ const AllProducts = () => {
         </motion.h2>
 
         <motion.div
-          className="flex  gap-2 hide-scrollbar pb-2"
+          className="flex  gap-2 no-scrollbar overflow-x-scroll  hide-scrollbar pb-2"
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
