@@ -46,7 +46,7 @@ const ProductCard = ({ product }) => {
   return (
     product && (
       <motion.div
-        className="rounded-lg justify-self-center overflow-hidden shadow-sm border border-gray-400/30 md:px-4 px-3 py-4 bg-white sm:min-w-40   min-w-40 max-w-56 w-full"
+        className="rounded-lg justify-self-center overflow-hidden shadow-sm border border-gray-400/30 md:px-4 px-3 py-4 bg-white sm:min-w-36   min-w-36 max-w-56 w-full"
         variants={cardVariants}
         initial="initial"
         whileHover="hover"
