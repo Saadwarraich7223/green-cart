@@ -63,7 +63,6 @@ const AllProducts = () => {
     inactive: { scale: 1 },
     active: {
       scale: 1.05,
-      color: "#fff",
       transition: { duration: 0.3 },
     },
     hover: {

@@ -1,9 +1,26 @@
 import toast from "react-hot-toast";
 import { useAppContext } from "../../context/AppContext";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { assets } from "../../assets/assets";
 
 const ProductList = () => {
   const { products, currency, axios, fetchProducts } = useAppContext();
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState(null);
+
+  const deleteProduct = async (id) => {
+    try {
+      const { data } = await axios.post("/api/product/delete", { id });
+      if (data.success) {
+        fetchProducts();
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   const toggleStock = async (id, inStock) => {
     try {
@@ -18,6 +35,17 @@ const ProductList = () => {
       toast.error(error.message);
     }
   };
+
+  const handleDeleteClick = (id) => {
+    setSelectedProductId(id);
+    setShowConfirm(true);
+  };
+
+  const confirmDelete = () => {
+    deleteProduct(selectedProductId);
+    setShowConfirm(false);
+  };
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -36,6 +64,7 @@ const ProductList = () => {
                   Selling Price
                 </th>
                 <th className="px-4 py-3 font-semibold truncate">In Stock</th>
+                <th className="px-4 py-3 font-semibold truncate">Delete</th>
               </tr>
             </thead>
             <tbody className="text-sm text-gray-500">
@@ -72,11 +101,46 @@ const ProductList = () => {
                       <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
                     </label>
                   </td>
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => handleDeleteClick(product._id)}
+                      className="bg-gray-100 p-2 rounded cursor-pointer hover:bg-gray-200"
+                    >
+                      <img src={assets.remove_icon} alt="" />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
+        {/* Confirmation Popup */}
+        {showConfirm && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl shadow-xl p-6 max-w-sm w-80 text-center">
+              <h2 className="text-xl font-semibold mb-4">Delete Product?</h2>
+              <p className="text-gray-600 mb-6">
+                Are you sure you want to delete this product? This action cannot
+                be undone.
+              </p>
+              <div className="flex justify-center gap-4">
+                <button
+                  className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+                  onClick={confirmDelete}
+                >
+                  Yes, Delete
+                </button>
+                <button
+                  className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-lg"
+                  onClick={() => setShowConfirm(false)}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
