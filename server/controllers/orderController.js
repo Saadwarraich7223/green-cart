@@ -165,6 +165,18 @@ export const stripeWebhooks = async (req, res) => {
   res.json({ receievd: true });
 };
 
+// update orderStatus : /api/order/status
+
+export const updateOrderStatus = async (req, res) => {
+  try {
+    const { id, status } = req.body;
+    await Order.findByIdAndUpdate(id, { status: status });
+    res.json({ success: true, message: "Order Status Updated" });
+  } catch (error) {
+    return res.json({ success: false, message: error.message });
+  }
+};
+
 // get Orders by User ID : /api/order/user
 
 export const getUserOrders = async (req, res) => {

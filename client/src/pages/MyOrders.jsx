@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppContext";
+import {
+  CircleCheck,
+  CircleX,
+  PackageCheck,
+  Truck,
+  CheckCheck,
+  Clock,
+} from "lucide-react";
 import toast from "react-hot-toast";
 
 const MyOrders = () => {
@@ -68,15 +76,55 @@ const MyOrders = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col justify-center md:ml-8 mb-4 md:mb-0  ">
+              <div className="flex flex-col justify-center md:ml-8 h-20 mb-4 md:mb-0  ">
                 <p>Quantity : {item.quantity || "1"}</p>
-                <p>Status : {order.status}</p>
+
                 <p>Date : {new Date(order.createdAt).toLocaleDateString()}</p>
+                <p className="mt-auto flex items-center gap-2 text-md text-gray-600">
+                  <span className="text-primary-dull">
+                    {order.status === "Order Placed" && (
+                      <PackageCheck className="w-5 h-5 text-blue-500" />
+                    )}
+                    {order.status === "Being Delivered" && (
+                      <Truck className="w-5 h-5  text-yellow-500 animate-bounce" />
+                    )}
+                    {order.status === "Delivered" && (
+                      <CheckCheck className="w-5 h-5  text-green-600" />
+                    )}
+                  </span>
+                  <span
+                    className={`font-medium ${
+                      order.status === "Delivered"
+                        ? "text-green-600"
+                        : order.status === "Being Delivered"
+                        ? "text-yellow-600"
+                        : "text-blue-600"
+                    }`}
+                  >
+                    {order.status}
+                  </span>
+                </p>
               </div>
-              <p className="text-primary text-lg font-medium">
-                Amount : {currency}
-                {item.product.offerPrice * item.quantity}
-              </p>
+              <div className="flex flex-col ">
+                <p className="text-primary/70 text-lg font-medium">
+                  Amount : {currency}
+                  {item.product.offerPrice * item.quantity}
+                </p>
+                <p
+                  className={`${
+                    order.isPayed ? "text-green-500/80" : "text-red-500/80"
+                  }   font-medium flex gap-1 flex-row`}
+                >
+                  <span>
+                    {order.isPayed ? (
+                      <CircleCheck width={20} />
+                    ) : (
+                      <CircleX width={20} />
+                    )}
+                  </span>
+                  {order.isPayed ? "Paid" : "Not Paid"}
+                </p>
+              </div>
             </div>
           ))}
         </div>

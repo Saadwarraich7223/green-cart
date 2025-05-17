@@ -14,7 +14,7 @@ const PaymentLoader = () => {
     if (nextUrl) {
       setTimeout(() => {
         navigate(`/${nextUrl}`);
-      }, 6000);
+      }, 8000);
     }
   }, [nextUrl]);
 

@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { assets } from "../../assets/assets";
 import { useAppContext } from "../../context/AppContext";
 import { PackageX } from "lucide-react";
+import toast from "react-hot-toast";
 
 const Orders = () => {
   const { currency, axios, isSeller } = useAppContext();
+  const [status, setStatus] = useState("Order Placed");
 
   const [orders, setOrders] = useState([]);
 
@@ -17,6 +19,25 @@ const Orders = () => {
       }
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const onChangeHandler = async (e, id) => {
+    try {
+      const status = e.target.value;
+      const { data } = await axios.post("/api/order/status", {
+        status: status,
+        id,
+      });
+
+      if (data.success) {
+        fetchOrders();
+        toast.success(data.message);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
     }
   };
 
@@ -77,7 +98,18 @@ const Orders = () => {
               <div className="flex flex-col text-sm md:text-base text-black/60">
                 <p>Method: {order.paymentType}</p>
                 <p>Date: {new Date(order.createdAt).toLocaleDateString()}</p>
-                <p>Payment: {order.isPaid ? "Paid" : "Pending"}</p>
+                <p>Payment: {order.isPayed ? "Paid" : "Not Paid"}</p>
+                <select
+                  onChange={(e) => onChangeHandler(e, order._id)}
+                  value={order.status}
+                  className="text-primary-dull w-full py-2.5 px-2 border border-gray-500/30 rounded  outline-none bg-primary/20  transition "
+                  name=""
+                  id=""
+                >
+                  <option value="Order Placed">Order Placed</option>
+                  <option value="Being Delivered">Being Delivered</option>
+                  <option value="Delivered">Delivered</option>
+                </select>
               </div>
             </div>
           ))
