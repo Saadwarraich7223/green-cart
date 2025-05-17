@@ -19,12 +19,14 @@ import AddProduct from "./pages/sellerDashboard/AddProduct";
 import ProductList from "./pages/sellerDashboard/ProductList";
 import Orders from "./pages/sellerDashboard/Orders";
 import PaymentLoader from "./components/PaymentLoader";
+import ScrollToTop from "./components/ScrollToTop";
 
 const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
   const { showUserLogin, isSeller } = useAppContext();
   return (
     <div className=" text-default min-h-screen text-gray-700 bg-white">
+      <ScrollToTop />
       {isSellerPath ? null : <Navbar />}
       {showUserLogin ? <Login /> : null}
 
